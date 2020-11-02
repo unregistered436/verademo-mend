@@ -16,11 +16,23 @@ jobs:
   
     - name: Build with Maven
       run: mvn clean verify
+
+    - name: Download the Pipeline Scanner
+      uses: wei/curl@master
+      with:
+        args: -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+    
+    - name: Unzip the Pipeline Scanner
+      run: unzip pipeline-scan-LATEST.zip pipeline-scan.jar
+ 
+    - name: Run Pipeline Scan
+      run: java -jar pipeline-scan.jar -f /home/runner/work/Verademo-master/Verademo-master/target/verademo.war -vid "${{secrets.VERACODE_API_ID}}" -vkey "${{secrets.VERACODE_API_SECRET}}" --fail_on_severity="Very High, High" --issue_details true -jo results.json
+
  
     - name: Veracode Static Analysis Pipeline Scan and SARIF import
       uses: veracode/veracode-pipeline-scan-results-to-sarif@v0.1.5
       with:
-        pipeline-results-json: scan-results.json
+        pipeline-results-json: results.json
         output-results-sarif: veracode-results.sarif
         finding-rule-level: "4:3:0"
 
