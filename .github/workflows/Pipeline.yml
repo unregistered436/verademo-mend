@@ -26,7 +26,7 @@ jobs:
       run: unzip pipeline-scan-LATEST.zip pipeline-scan.jar
  
     - name: Run Pipeline Scan
-      run: java -jar pipeline-scan.jar -f /home/runner/work/verademo-actions/verademo-actions/target/verademo.war -vid "${{secrets.VERACODE_API_ID}}" -vkey "${{secrets.VERACODE_API_SECRET}}" --fail_on_severity="Very High, High" --issue_details true -jo true
+      run: java -jar pipeline-scan.jar -f /home/runner/work/verademo-actions/verademo-actions/target/verademo.war -vid "${{secrets.VERACODE_API_ID}}" -vkey "${{secrets.VERACODE_API_KEY}}" --fail_on_severity="Very High, High" --issue_details true -jo true
 
     - name: Veracode Static Analysis Pipeline Scan SARIF import
       uses: veracode/veracode-pipeline-scan-results-to-sarif@v0.1.5
