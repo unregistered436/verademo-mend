@@ -30,7 +30,7 @@ jobs:
 
     - name: Veracode Static Analysis Pipeline Scan SARIF import
       uses: veracode/veracode-pipeline-scan-results-to-sarif@v0.1.5
-      with:
+      with: #default json output
         pipeline-results-json: results.json
         output-results-sarif: veracode-results.sarif
         finding-rule-level: "4:3:0"
