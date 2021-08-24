@@ -30,15 +30,14 @@ jobs:
         name: SCAScanResults
         path: sca_output.txt
 
-#    - uses: actions/setup-java@v1 # Make java accessible on path so the uploadandscan action can run.
-#      with: 
-#        java-version: '8'
-    - uses: actions/upload-artifact@v2 # Copy files from repository to docker container so the next uploadandscan action can access them.
+    # Run a Policy Scan
+    - uses: actions/upload-artifact@v2
       with:
-        path: target/*.war
+        path: target/verademo.war
     - uses: veracode/veracode-uploadandscan-action@master
       with:
-        filepath: 'target/'
+        appname: "Verademo-actions"
+        filepath: 'target/verademo.war'
         vid: '${{ secrets.VERACODE_API_ID }}'
         vkey: '${{ secrets.VERACODE_API_KEY }}'
-        include: '*.war'
+        createprofile: 'false'
