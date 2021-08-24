@@ -1,6 +1,10 @@
+# Aug 24th Update
 name: Verademo-actions-non-main-branches
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      -main
 
 jobs:
   build-pipelinescan:
