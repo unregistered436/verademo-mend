@@ -4,7 +4,7 @@ name: Verademo-actions-non-main-branches
 on:
   push:
     branches-ignore:
-      -main
+      - main
 
 jobs:
   build-pipelinescan:

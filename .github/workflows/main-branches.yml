@@ -4,7 +4,7 @@ name: Verademo-actions-main-branches
 on:
   push:
     branches:
-      -main
+      - main
 
 jobs:
   build-sca-policyscan:
