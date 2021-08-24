@@ -1,0 +1,43 @@
+name: Verademo-actions-main-branches
+
+on:
+  push:
+    branches:
+      -main
+
+jobs:
+  build-sca-policyscan:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+  
+    - name: Build with Maven
+      run: mvn clean install
+    
+    # Run a Software Composition Analysis scan
+    - run: curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan . --update-advisor 2>&1 | tee sca_output.txt
+      env:
+        SRCCLR_API_TOKEN: ${{secrets.SRCCLR_API_TOKEN}}
+    - uses: actions/upload-artifact@v2
+      with:
+        name: SCAScanResults
+        path: sca_output.txt
+
+#    - uses: actions/setup-java@v1 # Make java accessible on path so the uploadandscan action can run.
+#      with: 
+#        java-version: '8'
+    - uses: actions/upload-artifact@v2 # Copy files from repository to docker container so the next uploadandscan action can access them.
+      with:
+        path: target/*.war
+    - uses: veracode/veracode-uploadandscan-action@master
+      with:
+        filepath: 'target/'
+        vid: '${{ secrets.VERACODE_API_ID }}'
+        vkey: '${{ secrets.VERACODE_API_KEY }}'
+        include: '*.war'

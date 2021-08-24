@@ -1,4 +1,4 @@
-name: Verademo-Pipeline
+name: Verademo-actions-non-main-branches
 
 on: [push]
 
@@ -15,7 +15,16 @@ jobs:
         java-version: 1.8
   
     - name: Build with Maven
-      run: mvn clean verify
+      run: mvn clean install
+
+    # Run a Software Composition Analysis scan
+    - run: curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan . --update-advisor 2>&1 | tee sca_output.txt
+      env:
+        SRCCLR_API_TOKEN: ${{secrets.SRCCLR_API_TOKEN}}
+    - uses: actions/upload-artifact@v2
+      with:
+        name: SCAScanResults
+        path: sca_output.txt
 
     - name: Download the Pipeline Scanner
       uses: wei/curl@master
