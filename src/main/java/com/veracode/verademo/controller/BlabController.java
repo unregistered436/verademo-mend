@@ -1,4 +1,4 @@
-//first Guidepoint Security Test
+//1st Guidepoint Security Test
 package com.veracode.verademo.controller;
 
 import java.sql.Connection;
